@@ -123,7 +123,7 @@ def copy_entry(source_file, destination_file, entry_number):
         print("Некорректный номер строки для копирования.")
 
 
-file_name = 'phone.csv'
+file_name = 'telephone.csv'
 
 def main():
     while True:
