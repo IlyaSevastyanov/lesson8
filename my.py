@@ -97,6 +97,32 @@ def delete_file_entry(file_name, field_to_delete, value_to_delete):
         f_writer = DictWriter(data, fieldnames=['Имя', 'Фамилия', 'Телефон'])
         f_writer.writeheader()
         f_writer.writerows(res)
+
+
+def copy_entry(source_file, destination_file, entry_number):
+    source_data = read_file(source_file)
+
+    if 1 <= entry_number <= len(source_data):
+        entry_to_copy = source_data[entry_number - 1]
+
+        if not exists(destination_file):
+            create_file(destination_file)
+
+        destination_data = read_file(destination_file)
+        destination_data.append(entry_to_copy)
+
+        with open(destination_file, 'w', encoding='utf-8', newline='') as dest_data:
+            f_writer = DictWriter(dest_data, fieldnames=['Имя', 'Фамилия', 'Телефон'])
+            f_writer.writeheader()
+            f_writer.writerows(destination_data)
+
+        print(f"Запись из строки {entry_number} успешно скопирована в файл '{destination_file}'.")
+        print(f"Содержимое файла '{destination_file}':")
+        print(*read_file(destination_file))
+    else:
+        print("Некорректный номер строки для копирования.")
+
+
 file_name = 'phone.csv'
 
 def main():
@@ -125,6 +151,9 @@ def main():
             field_to_delete = input("Введите поле для удаления (Имя/Фамилия/Телефон): ")
             value_to_delete = input("Введите значение для удаления: ")
             delete_file_entry(file_name, field_to_delete, value_to_delete)
+        elif command == "cp":
+            entry_number = int(input("Введите номер строки для копирования: "))
+            copy_entry(file_name, 'copied_phone.csv', entry_number)
         else:
             print("Некорректная команда")
 
